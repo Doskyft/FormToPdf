@@ -1,35 +1,64 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    {% for form in formGroup %}
 
-        {% if form.property == "category" %}
-            {{ form.label }}
-            <hr>
+    <div class="container mt-5">
 
-            {% if form.fields is defined %}
-                {% for field in form.fields %}
+        {% for form in formGroup %}
 
-                    {% if field.type in ['text', 'number'] %}
-                        <label for="{{ field.property }}">{{ field.label }}</label>
-                        <input id="{{ field.property }}" name="{{ field.property }}" type="{{ field.property }}"
-                               placeholder="{{ field.placeholder is defined ? field.placeholder : null }}"
-                            {% if field.attr is defined %}
-                                {% for key, attr in field.attr %}
-                                    {{ key }}="{{ attr }}"
-                                {% endfor %}
-                            {% endif %}
-                        >
-                    {% elseif field.type in ['checkbox'] %}
-                        {% for box in field.box %}
-                            <label for="{{ box.property }}">{{ box.label }}</label>
-                            <input id="{{ box.property }}" type="checkbox">
-                        {% endfor %}
-                    {% endif %}<br>
+            <div class="row">
+                <div class="col-12">
+                    {% if form.property == "category" %}
+                        <h1>{{ form.label }}</h1>
+                        <hr>
 
-                {% endfor %}
-            {% endif %}
-        {% endif %}
+                        {% if form.fields is defined %}
+                            {% for field in form.fields %}
 
-    {% endfor %}
+                                {% if field.type in ['text', 'number'] %}
+
+                                    <div class="form-group">
+                                        <label for="{{ field.property }}">{{ field.label }}</label>
+                                        <input id="{{ field.property }}" name="{{ field.property }}"
+                                               type="{{ field.property }}"
+                                               placeholder="{{ field.placeholder is defined ? field.placeholder : null }}"
+                                               class="form-control"
+                                        {% if field.attr is defined %}
+                                            {% for key, attr in field.attr %}
+                                                {{ key }}="{{ attr }}"
+                                            {% endfor %}
+                                        {% endif %}
+                                        >
+                                    </div>
+
+                                {% elseif field.type in ['checkbox', 'radio'] %}
+
+                                    {{ field.label is defined ? field.label : null }}
+                                    {% for choice in field.choices %}
+                                        <div class="form-check">
+                                            <input id="{{ choice.property }}" name="{{ field.name }}"
+                                                   type="{{ field.type }}" class="form-check-input">
+                                            <label for="{{ choice.property }}"
+                                                   class="form-check-label">{{ choice.label }}</label>
+                                        </div>
+                                    {% endfor %}
+
+                                {% elseif field.type in ['collection'] %}
+
+                                    <select class="selectpicker" data-live-search="true">
+                                        <option value="{{ 'field.varInEntity' }}">Test</option>
+                                        <option value="{{ 'field.varInEntity' }}">Test2</option>
+                                    </select>
+
+                                {% endif %}
+
+                            {% endfor %}
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+
+        {% endfor %}
+    </div>
+
 {% endblock %}

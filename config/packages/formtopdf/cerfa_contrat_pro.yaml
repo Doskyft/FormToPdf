@@ -13,8 +13,13 @@ parameters:
             type: 'text'
             attr: { maxlength: 14, minlength: 14 }
 
-          - label: "Siret de l'organisme proposant la formation"
-            type: 'checkbox'
-            box:
-              - { property: 'formation_siret[0]', label: 'Oui' }
-              - { property: 'formation_siret[0]', label: 'Non' }
+          - label: 'Genre'
+            type: 'radio'
+            name: 'gender'
+            choices:
+              - { property: 'stagiaire_homme[0]', label: 'Homme' }
+              - { property: 'stagiaire_femme[0]', label: 'Femme' }
+
+          - label: 'Test'
+            type: 'collection'
+            entity: 'App\Entity\Test'
