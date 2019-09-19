@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% for form in formGroup %}
+
+        {% if form.property == "category" %}
+            {{ form.label }}
+            <hr>
+
+            {% if form.fields is defined %}
+                {% for field in form.fields %}
+
+                    {% if field.type in ['text', 'number'] %}
+                        <label for="{{ field.property }}">{{ field.label }}</label>
+                        <input id="{{ field.property }}" name="{{ field.property }}" type="{{ field.property }}"
+                               placeholder="{{ field.placeholder is defined ? field.placeholder : null }}"
+                            {% if field.attr is defined %}
+                                {% for key, attr in field.attr %}
+                                    {{ key }}="{{ attr }}"
+                                {% endfor %}
+                            {% endif %}
+                        >
+                    {% elseif field.type in ['checkbox'] %}
+                        {% for box in field.box %}
+                            <label for="{{ box.property }}">{{ box.label }}</label>
+                            <input id="{{ box.property }}" type="checkbox">
+                        {% endfor %}
+                    {% endif %}<br>
+
+                {% endfor %}
+            {% endif %}
+        {% endif %}
+
+    {% endfor %}
+{% endblock %}

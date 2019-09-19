@@ -1,0 +1,2 @@
+imports:
+  - { resource: 'formtopdf/cerfa_contrat_pro.yaml' }

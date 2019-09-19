@@ -1,0 +1,20 @@
+parameters:
+  cerfa_contrat_pro:
+    form:
+      - property: 'category'
+        label: 'Formation'
+        fields:
+          - property: 'formation_nom[0]'
+            label: 'Nom de la formation'
+            type: 'text'
+
+          - property: 'formation_siret[0]'
+            label: "Siret de l'organisme proposant la formation"
+            type: 'text'
+            attr: { maxlength: 14, minlength: 14 }
+
+          - label: "Siret de l'organisme proposant la formation"
+            type: 'checkbox'
+            box:
+              - { property: 'formation_siret[0]', label: 'Oui' }
+              - { property: 'formation_siret[0]', label: 'Non' }
