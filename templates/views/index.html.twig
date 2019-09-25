@@ -1,63 +1,78 @@
 {% extends 'base.html.twig' %}
 
+{% macro textOrNumber(field) %}
+    <div class="form-group">
+        <label for="{{ field.property }}">{{ field.label }}</label>
+        <input id="{{ field.property }}" name="{{ field.property }}"
+               type="{{ field.property }}"
+               placeholder="{{ field.placeholder is defined ? field.placeholder : null }}"
+               class="form-control"
+        {% if field.attr is defined %}
+            {% for key, attr in field.attr %}
+                {{ key }}="{{ attr }}"
+            {% endfor %}
+        {% endif %}
+        >
+    </div>
+{% endmacro %}
+
+{% macro checkboxOrRadio(field) %}
+    {{ field.label is defined ? field.label : null }}
+    {% for choice in field.choices %}
+        <div class="form-check">
+            <input id="{{ choice.property }}" name="{{ field.name }}"
+                   type="{{ field.type }}" class="form-check-input">
+            <label for="{{ choice.property }}"
+                   class="form-check-label">{{ choice.label }}</label>
+        </div>
+    {% endfor %}
+{% endmacro %}
+
+{% macro collection(field) %}
+    <select class="selectpicker" data-live-search="true">
+        <option value="{{ 'field.varInEntity' }}">Test</option>
+        <option value="{{ 'field.varInEntity' }}">Test2</option>
+    </select>
+{% endmacro %}
+
+{% macro category(form) %}
+    <div class="mt-3 {{ form.type == 'row' ? 'd-flex justify-content-around' : '' }}">
+        {% if form.label is defined %}
+            <h1>{{ form.label }}</h1>
+            <hr>
+        {% endif %}
+        {% if form.fields is defined %}
+            {% for field in form.fields %}
+                {% if field.type in ['text', 'number'] %}
+                    {{ _self.textOrNumber(field, form.type == 'row') }}
+                {% elseif field.type in ['checkbox', 'radio'] %}
+                    {{ _self.checkboxOrRadio(field) }}
+                {% elseif field.type in ['collection'] %}
+                    {{ _self.collection(field) }}
+                {% elseif field.type in ['row'] %}
+                    {{ _self.category(field) }}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endmacro %}
+
+
+{% macro form(form) %}
+    <div class="row">
+        <div class="col-12">
+            {% if form.type == "category" %}
+                {{ _self.category(form) }}
+            {% endif %}
+        </div>
+    </div>
+{% endmacro %}
+
 {% block body %}
 
     <div class="container mt-5">
-
         {% for form in formGroup %}
-
-            <div class="row">
-                <div class="col-12">
-                    {% if form.property == "category" %}
-                        <h1>{{ form.label }}</h1>
-                        <hr>
-
-                        {% if form.fields is defined %}
-                            {% for field in form.fields %}
-
-                                {% if field.type in ['text', 'number'] %}
-
-                                    <div class="form-group">
-                                        <label for="{{ field.property }}">{{ field.label }}</label>
-                                        <input id="{{ field.property }}" name="{{ field.property }}"
-                                               type="{{ field.property }}"
-                                               placeholder="{{ field.placeholder is defined ? field.placeholder : null }}"
-                                               class="form-control"
-                                        {% if field.attr is defined %}
-                                            {% for key, attr in field.attr %}
-                                                {{ key }}="{{ attr }}"
-                                            {% endfor %}
-                                        {% endif %}
-                                        >
-                                    </div>
-
-                                {% elseif field.type in ['checkbox', 'radio'] %}
-
-                                    {{ field.label is defined ? field.label : null }}
-                                    {% for choice in field.choices %}
-                                        <div class="form-check">
-                                            <input id="{{ choice.property }}" name="{{ field.name }}"
-                                                   type="{{ field.type }}" class="form-check-input">
-                                            <label for="{{ choice.property }}"
-                                                   class="form-check-label">{{ choice.label }}</label>
-                                        </div>
-                                    {% endfor %}
-
-                                {% elseif field.type in ['collection'] %}
-
-                                    <select class="selectpicker" data-live-search="true">
-                                        <option value="{{ 'field.varInEntity' }}">Test</option>
-                                        <option value="{{ 'field.varInEntity' }}">Test2</option>
-                                    </select>
-
-                                {% endif %}
-
-                            {% endfor %}
-                        {% endif %}
-                    {% endif %}
-                </div>
-            </div>
-
+            {{ _self.form(form) }}
         {% endfor %}
     </div>
 

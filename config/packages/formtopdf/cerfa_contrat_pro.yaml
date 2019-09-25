@@ -1,7 +1,7 @@
 parameters:
   cerfa_contrat_pro:
     form:
-      - property: 'category'
+      - type: 'category'
         label: 'Formation'
         fields:
           - property: 'formation_nom[0]'
@@ -23,3 +23,14 @@ parameters:
           - label: 'Test'
             type: 'collection'
             entity: 'App\Entity\Test'
+
+          - type: 'row'
+            fields:
+              - property: 'formation_nom[0]'
+                label: 'Nom de la formation'
+                type: 'text'
+
+              - property: 'formation_siret[0]'
+                label: "Siret de l'organisme proposant la formation"
+                type: 'text'
+                attr: { maxlength: 14, minlength: 14 }
